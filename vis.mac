@@ -27,20 +27,25 @@
 /vis/viewer/set/style surface
 ##/vis/viewer/flush
 
+/vis/verbose/errors
+
+# Draw geometry 
+/vis/drawVolume
 
 
 #=========================================#
 # create empty scene                     =# 
 #=========================================#
-/vis/scene/create
+#/vis/scene/create
 
 ##==============#########================##
 # draw scene                             =#
 ##=================##########============##
 #Output an empty detector
 
-/vis/scene/add/volume 
-/vis/drawVolume pvWorld
+#/vis/scene/add/volume 
+#/vis/drawVolume pvWorld
+
 #! ! ! -box 
 #/vis/scene/add/volume Absorber_0
 
