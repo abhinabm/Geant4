@@ -128,9 +128,9 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
   //Start building the detector
   //------------------------------------------------------------------
-  solidWrapping = new G4Box("sWrapping",scint_x/2.+wrapping_thinkness,scint_y/2.+wrapping_thinkness,scint_z/2.+wrapping_thinkness/2.);
-  logicWrapping = new G4LogicalVolume(solidWrapping, NISTManager->FindOrBuildMaterial("TEFLON_OPTICAL"), "lWrapping", 0, 0, 0);
-  physiWrapping = new G4PVPlacement(0, G4ThreeVector(0.*mm,0.*mm,0.*mm), logicWrapping, "pvWrapping", logicWorld, false, 0);   
+  auto solidWrapping = new G4Box("sWrapping",scint_x/2.+wrapping_thinkness,scint_y/2.+wrapping_thinkness,scint_z/2.+wrapping_thinkness/2.);
+  auto logicWrapping = new G4LogicalVolume(solidWrapping, NISTManager->FindOrBuildMaterial("TEFLON_OPTICAL"), "lWrapping", 0, 0, 0);
+  auto physiWrapping = new G4PVPlacement(0, G4ThreeVector(0.*mm,0.*mm,0.*mm), logicWrapping, "pvWrapping", logicWorld, false, 0);   
 
   //------------------------------------------------------------------
   solidScint = new G4Box("sScint",scint_x/2.,scint_y/2.,scint_z/2.);
