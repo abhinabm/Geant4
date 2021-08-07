@@ -119,11 +119,11 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
   G4double HalfWorldLength = 0.5*fWorldLength;
 
-  solidWorld = new G4Box("sWorld",HalfWorldLength,HalfWorldLength,HalfWorldLength);
-  logicWorld = new G4LogicalVolume(solidWorld, NISTManager->FindOrBuildMaterial("G4_AIR"), "lWorld", 0, 0, 0);
+  auto solidWorld = new G4Box("sWorld",HalfWorldLength,HalfWorldLength,HalfWorldLength);
+  auto logicWorld = new G4LogicalVolume(solidWorld, NISTManager->FindOrBuildMaterial("G4_AIR"), "lWorld", 0, 0, 0);
   
   //  Must place the World Physical volume unrotated at (0,0,0).
-  physiWorld = new G4PVPlacement(0, G4ThreeVector(0.*mm,0.*mm,0.*mm), logicWorld, "pvWorld", 0, false, 0);   
+  auto physiWorld = new G4PVPlacement(0, G4ThreeVector(0.*mm,0.*mm,0.*mm), logicWorld, "pvWorld", 0, false, 0 ,true );   
   //G4cout<<"world center position:  "<<physiWorld->GetObjectTranslation()<<G4endl; 
 
   //Start building the detector
