@@ -28,49 +28,11 @@
 
 //-----------------------------------------------------------------------------
  
-DetectorConstruction::DetectorConstruction(G4double worldSize)
- 
-{
-  solidWorld =0;
-  logicWorld =0; 
-  physiWorld =0;
-  
-  solidWrapping = 0;
-  logicWrapping = 0;
-  physiWrapping = 0;   
+DetectorConstruction::DetectorConstruction()
+: G4VUserDetectorConstruction(),
+  fScoringVolume(0)
+{ }
 
-  solidScint = 0;
-  logicScint = 0;
-  physiScint = 0;   
-
-  solidSensor = 0;
-  logicSensor = 0;
-  physiSensor = 0;   
-
-  stepLimit = 0;
-
-  NISTManager         = G4NistManager::Instance();
-
-  World_VisAtt   = 0;
-  VisAttWrapping = 0;
-  VisAttScint    = 0;
-  VisAttSensor   = 0;  
- 
-  fWorldLength        = worldSize;
-  //field size devided by (fiber_diameter+fiber_gap) has to be even number to obtain symetric arangement of fibers
-  field_size          = 40.455*cm;//10.44*cm;  //40.455*cm for 931 fibers per row; 
-                                   //4.35*cm for 101 fibers per row; 
-                                   //2.61*cm for 61 fibers per row; 
-                                   //2.61*mm for 7 fibers per row; 
-                                   //100.*cm;
-  scint_x             = 2.0*cm;
-  scint_y             = 2.0*cm;
-  scint_z             = 4.0*cm;
-  wrapping_thinkness  = 3.0*mm;
-  sensor_thickness    = 1.0*cm;
-  //-----------------------------------------------------------------;
-  //DataManager* dataManager = DataManager::GetInstance();
-}
 
 //-----------------------------------------------------------------------------
  
@@ -93,38 +55,45 @@ DetectorConstruction::~DetectorConstruction()
   // if(logicSensor!=0){delete logicSensor; logicSensor = 0;}
   // if(physiSensor!=0){delete physiSensor; physiSensor = 0;}
   
-  if(solidWorld!=0){delete solidWorld; solidWorld = 0;}
-  if(logicWorld!=0){delete logicWorld; logicWorld = 0;}
-  if(physiWorld!=0){delete physiWorld; physiWorld = 0;}
+ //  if(solidWorld!=0){delete solidWorld; solidWorld = 0;}
+ // if(logicWorld!=0){delete logicWorld; logicWorld = 0;}
+ // if(physiWorld!=0){delete physiWorld; physiWorld = 0;}
 
-  if(stepLimit!=0){delete stepLimit; stepLimit =0;}
+ // if(stepLimit!=0){delete stepLimit; stepLimit =0;}
 }
 
 //-----------------------------------------------------------------------------
  
 G4VPhysicalVolume* DetectorConstruction::Construct()
 {  
+	
+  // Get nist material manager
+  G4NistManager* nist = G4NistManager::Instance();
+ 
+	
+  //------------------------------ 
+  // World
+  //------------------------------ 
+	
+  // G4GeometryManager::GetInstance()->SetWorldMaximumExtent(fWorldLength);
+ // G4cout << "Computed tolerance = "
+ //        << G4GeometryTolerance::GetInstance()->GetSurfaceTolerance()/mm
+  //       << " mm" << G4endl;
+
+  G4double fWorldLength = 2.0*m;	
+  G4double HalfWorldLength = 0.5*fWorldLength;
+
+  auto solidWorld = new G4Box("sWorld",HalfWorldLength,HalfWorldLength,HalfWorldLength);
+  auto logicWorld = new G4LogicalVolume(solidWorld, NISTManager->FindOrBuildMaterial("G4_AIR"), "lWorld", 0, 0, 0);
+  auto physiWorld = new G4PVPlacement(0, G4ThreeVector(), logicWorld, "pvWorld", 0, false, 0 ,true );   
+  
+
+	
   //------------------------------
   // Construct Materials
   //------------------------------
   ConstructMaterials();
 
-  //------------------------------ 
-  // World
-  //------------------------------ 
-  G4GeometryManager::GetInstance()->SetWorldMaximumExtent(fWorldLength);
-  G4cout << "Computed tolerance = "
-         << G4GeometryTolerance::GetInstance()->GetSurfaceTolerance()/mm
-         << " mm" << G4endl;
-
-  G4double HalfWorldLength = 0.5*fWorldLength;
-
-  auto solidWorld = new G4Box("sWorld",HalfWorldLength,HalfWorldLength,HalfWorldLength);
-  auto logicWorld = new G4LogicalVolume(solidWorld, NISTManager->FindOrBuildMaterial("G4_AIR"), "lWorld", 0, 0, 0);
-  
-  //  Must place the World Physical volume unrotated at (0,0,0).
-  auto physiWorld = new G4PVPlacement(0, G4ThreeVector(0.*mm,0.*mm,0.*mm), logicWorld, "pvWorld", 0, false, 0 ,true );   
-  //G4cout<<"world center position:  "<<physiWorld->GetObjectTranslation()<<G4endl; 
 
   //Start building the detector
   //------------------------------------------------------------------
