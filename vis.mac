@@ -1,0 +1,93 @@
+#=========================================#
+# Macro file for the visualization phase =#
+# when runing in interactive mode        =# 
+#=========================================#
+#============================================================#
+# Create a scene handler for a specific graphics system     =#
+# (Edit the next line(s) to choose another graphics system) =#
+#============================================================#
+/vis/open OGL #600x600-0+0
+#/vis/open OGLIQt 
+#/vis/open DAWN
+#/vis/open OGLSX #600x600-0+0
+#/vis/open OIX
+#/vis/open DAWNFILE
+#/vis/open HepRepFile
+
+#=========================================#
+# set viewer options                     =#
+#=========================================#
+
+/vis/viewer/set/autoRefresh false
+##/vis/viewer/set/viewpointThetaPhi -45 -45 deg
+/vis/viewer/set/viewpointThetaPhi 0 0 deg
+#/vis/viewer/set/background white
+/vis/viewer/set/auxiliaryEdge true
+/vis/viewer/set/edge 
+/vis/viewer/set/style surface
+##/vis/viewer/flush
+
+
+
+#=========================================#
+# create empty scene                     =# 
+#=========================================#
+/vis/scene/create
+
+##==============#########================##
+# draw scene                             =#
+##=================##########============##
+#Output an empty detector
+
+/vis/scene/add/volume 
+/vis/drawVolume pvWorld
+#! ! ! -box 
+#/vis/scene/add/volume Absorber_0
+
+#/vis/scene/notifyHandlers
+
+#/vis/scene/add/axes -30 0 60 20 cm
+#/vis/scene/add/scale 30 cm 100 0 100
+#/vis/scene/add/text 0 0 0 um 12 0 0 *
+
+# Draw trajectories at end of event, showing trajectory points as
+# markers of size 2 pixels
+/vis/scene/add/trajectories
+#/vis/modeling/trajectories/create/drawByCharge
+#/vis/modeling/trajectories/drawByCharge-0/default/setDrawStepPts true
+#/vis/modeling/trajectories/drawByCharge-0/default/setStepPtsSize 2
+# (if too many tracks cause core dump => /tracking/storeTrajectory 0)
+
+# To draw gammas only
+#/vis/filtering/trajectories/create/particleFilter
+#/vis/filtering/trajectories/particleFilter-0/add gamma
+#/vis/filtering/trajectories/particleFilter-0/add opticalphoton
+#/vis/filtering/trajectories/particleFilter-0/add e+
+
+# To draw charged particles only
+#/vis/filtering/trajectories/particleFilter-0/invert true
+
+# Many other options available with /vis/modeling and /vis/filtering.
+# For example, select colour by particle ID
+/vis/modeling/trajectories/create/drawByParticleID
+/vis/modeling/trajectories/drawByParticleID-0/set e+ red
+/vis/modeling/trajectories/drawByParticleID-0/set e- blue
+/vis/modeling/trajectories/drawByParticleID-0/set gamma green
+/vis/modeling/trajectories/drawByParticleID-0/set opticalphoton cyan
+/vis/modeling/trajectories/drawByParticleID-0/set proton yellow
+
+/vis/scene/endOfEventAction accumulate 10
+##/vis/viewer/pan 20 0 cm
+##/vis/viewer/flush
+##/vis/viewer/zoom 0.82
+##/vis/viewer/zoom 4
+#/vis/viewer/pan 10 -5 cm 
+#/vis/viewer/flush   
+
+##/vis/viewer/zoom 12
+##/vis/viewer/pan 23 -12 cm     
+##/vis/viewer/zoom 1.3   
+##/vis/viewer/set/viewpointThetaPhi 47 42 deg
+/vis/viewer/set/viewpointThetaPhi 0 0 deg
+#/vis/viewer/zoom 20
+#/vis/viewer/flush 
