@@ -93,11 +93,11 @@ DetectorConstruction::~DetectorConstruction()
   // if(logicSensor!=0){delete logicSensor; logicSensor = 0;}
   // if(physiSensor!=0){delete physiSensor; physiSensor = 0;}
   
-  if(solidWorld!=0){delete solidWorld; solidWorld = 0;}
-  if(logicWorld!=0){delete logicWorld; logicWorld = 0;}
-  if(physiWorld!=0){delete physiWorld; physiWorld = 0;}
+ //  if(solidWorld!=0){delete solidWorld; solidWorld = 0;}
+ // if(logicWorld!=0){delete logicWorld; logicWorld = 0;}
+ //  if(physiWorld!=0){delete physiWorld; physiWorld = 0;}
 
-  if(stepLimit!=0){delete stepLimit; stepLimit =0;}
+ // if(stepLimit!=0){delete stepLimit; stepLimit =0;}
 }
 
 //-----------------------------------------------------------------------------
